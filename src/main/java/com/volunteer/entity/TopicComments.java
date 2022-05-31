@@ -37,12 +37,12 @@ public class TopicComments implements Serializable {
     /**
      * 关联的1级评论id，如果是一级评论，则值为0
      */
-    private Long parentId;
+//    private Long parentId;
 
     /**
      * 回复的评论id
      */
-    private Long answerId;
+//    private Long answerId;
 
     /**
      * 回复的内容
@@ -52,7 +52,7 @@ public class TopicComments implements Serializable {
     /**
      * 点赞数
      */
-    private Integer liked;
+//    private Integer liked;
 
     /**
      * 状态，0：正常，1：被举报，2：禁止查看
