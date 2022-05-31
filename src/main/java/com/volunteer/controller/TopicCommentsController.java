@@ -5,9 +5,8 @@ import com.volunteer.entity.TopicComments;
 import com.volunteer.service.ITopicCommentsService;
 import com.volunteer.utils.UserHolder;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -25,11 +24,18 @@ public class TopicCommentsController {
     private ITopicCommentsService topicCommentsService;
 
     @PostMapping("/save")
-    public Result saveTopicComments(TopicComments topicComments) {
+    @ApiOperation("保存评论")
+    public Result saveTopicComments(@RequestBody TopicComments topicComments) {
         String openid = UserHolder.getUser().getOpenid();
         topicComments.setUserId(openid);
         topicCommentsService.save(topicComments);
         return Result.ok(topicComments.getId());
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询评论")
+    public Result queryTopicCommentsById(@PathVariable Long id) {
+        return topicCommentsService.queryTopicCommentsById(id);
     }
 
 }
