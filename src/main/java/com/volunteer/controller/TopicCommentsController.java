@@ -35,7 +35,7 @@ public class TopicCommentsController {
     @GetMapping("/{id}")
     @ApiOperation("根据id查询评论")
     public Result queryTopicCommentsById(@PathVariable Long id) {
-        return topicCommentsService.queryTopicCommentsById(id);
+        return topicCommentsService.queryTopicCommentsByTopicId(id);
     }
 
 }

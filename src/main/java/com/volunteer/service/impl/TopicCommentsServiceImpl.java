@@ -7,12 +7,16 @@ import com.volunteer.mapper.TopicCommentsMapper;
 import com.volunteer.service.ITopicCommentsService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TopicCommentsServiceImpl extends ServiceImpl<TopicCommentsMapper, TopicComments> implements ITopicCommentsService {
 
-    // TODO
     @Override
-    public Result queryTopicCommentsById(Long id) {
-        return null;
+    public Result queryTopicCommentsByTopicId(Long id) {
+        List<TopicComments> topicComments = query().eq("topicId", id).list();
+        return Result.ok(topicComments);
     }
+
+
 }

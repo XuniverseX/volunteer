@@ -5,5 +5,5 @@ import com.volunteer.dto.Result;
 import com.volunteer.entity.TopicComments;
 
 public interface ITopicCommentsService extends IService<TopicComments> {
-    Result queryTopicCommentsById(Long id);
+    Result queryTopicCommentsByTopicId(Long id);
 }
