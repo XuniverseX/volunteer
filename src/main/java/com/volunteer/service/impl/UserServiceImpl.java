@@ -40,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public Result login(String code) {
+    public Result<TokenUserDTO> login(String code) {
         // 开发者服务器通过登录凭证获得 sessionId
         JSONObject jsonObject = WechatUtil.getSessionKeyOrOpenId(code);
         // 根据微信接口，获得返回的参数
@@ -64,29 +64,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         Map<String, Object> userMap = BeanUtil.beanToMap(userDTO, new HashMap<>(),
                 CopyOptions.create()
                         .setIgnoreCase(true)
-                        .setFieldValueEditor((fieldName, fieldValue) -> fieldName.toString()));
+                        .setFieldValueEditor((fieldName, fieldValue) -> fieldName));
         // 将User存入redis
         String tokenKey = RedisConstants.LOGIN_USER_KEY + token;
         stringRedisTemplate.opsForHash().putAll(tokenKey, userMap);
         // 设置token有效期
         stringRedisTemplate.expire(tokenKey, LOGIN_USER_TTL, TimeUnit.MINUTES);
         // 返回token
-        return Result.ok(new TokenUserDTO(userDTO, token));
+        return Result.success(new TokenUserDTO(userDTO, token));
     }
 
     @Override
-    public Result sign() {
+    public Result<Object> sign() {
         String openid = UserHolder.getUser().getOpenid();
         LocalDateTime now = LocalDateTime.now();
         String keySuffix = now.format(DateTimeFormatter.ofPattern(":yyyyMM"));
         String key = "sign:" + openid + keySuffix;
         int dayOfMonth = now.getDayOfMonth();
         stringRedisTemplate.opsForValue().setBit(key, dayOfMonth - 1, true);
-        return Result.ok();
+        return Result.success();
     }
 
     @Override
-    public Result signCount() {
+    public Result<Integer> signCount() {
         String openid = UserHolder.getUser().getOpenid();
         LocalDateTime now = LocalDateTime.now();
         String keySuffix = now.format(DateTimeFormatter.ofPattern(":yyyyMM"));
@@ -97,11 +97,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 BitFieldSubCommands.create().get(BitFieldSubCommands.BitFieldType.unsigned(dayOfMonth)).valueAt(0)
         );
         if (longs == null || longs.isEmpty()) {
-            return Result.ok(0);
+            return Result.success(0);
         }
         Long num = longs.get(0);
         if (num == null || num == 0) {
-            return Result.ok(0);
+            return Result.success(0);
         }
         int count = 0;
         while (true) {
@@ -112,7 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             }
             num >>>= 1;
         }
-        return Result.ok(count);
+        return Result.success(count);
     }
 
     private User createUserWithOpenId(String openid, String sessionKey) {

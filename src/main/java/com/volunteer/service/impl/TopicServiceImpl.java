@@ -28,56 +28,56 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
     private IUserService userService;
 
     @Override
-    public Result likeTopic(Long id) {
+    public Result<Object> likeTopic(Long id) {
         String userId = UserHolder.getUser().getOpenid();
 
         String key = RedisConstants.TOPIC_LIKED_KEY + id;
-        Boolean isMember = stringRedisTemplate.opsForSet().isMember(key, userId.toString());
+        Boolean isMember = stringRedisTemplate.opsForSet().isMember(key, userId);
         if (BooleanUtil.isFalse(isMember)) {
             boolean isSuccess = update().setSql("liked = liked + 1").eq("id", id).update();
 
             if (isSuccess) {
-                stringRedisTemplate.opsForSet().add(key, userId.toString());
+                stringRedisTemplate.opsForSet().add(key, userId);
             }
         } else {
             boolean isSuccess = update().setSql("liked = liked - 1").eq("id", id).update();
 
             if (isSuccess) {
-                stringRedisTemplate.opsForSet().remove(key, userId.toString());
+                stringRedisTemplate.opsForSet().remove(key, userId);
             }
         }
-        return Result.ok();
+        return Result.success();
     }
 
 
 
     @Override
-    public Result queryHotTopic(Integer current) {
+    public Result<List<Topic>> queryHotTopic(Integer current) {
         Page<Topic> page = query().orderByDesc("liked").page(new Page<>(current, SystemConstants.MAX_PAGE_SIZE));
         List<Topic> records = page.getRecords();
         records.forEach(topic -> {
             this.queryTopicUser(topic);
             this.isTopicLiked(topic);
         });
-        return Result.ok(records);
+        return Result.success(records);
     }
 
     @Override
-    public Result queryTopicById(Long id) {
+    public Result<Topic> queryTopicById(Long id) {
         Topic topic = getById(id);
         if (topic == null) {
             return Result.fail("博客不存在");
         }
         this.queryTopicUser(topic);
         this.isTopicLiked(topic);
-        return Result.ok(topic);
+        return Result.success(topic);
     }
 
     private void isTopicLiked(Topic topic) {
         String userId = UserHolder.getUser().getOpenid();
 
         String key = RedisConstants.TOPIC_LIKED_KEY + topic.getId();
-        Boolean isMember = stringRedisTemplate.opsForSet().isMember(key, userId.toString());
+        Boolean isMember = stringRedisTemplate.opsForSet().isMember(key, userId);
         topic.setIsLike(BooleanUtil.isTrue(isMember));
     }
 

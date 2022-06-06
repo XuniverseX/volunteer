@@ -1,5 +1,6 @@
 package com.volunteer.controller;
 
+import com.volunteer.dto.TokenUserDTO;
 import com.volunteer.dto.UserDTO;
 import com.volunteer.service.IUserService;
 import com.volunteer.dto.Result;
@@ -28,34 +29,34 @@ public class UserController {
 
     @GetMapping("/login")
     @ApiOperation("登录")
-    public Result login(@RequestParam String code) {
+    public Result<TokenUserDTO> login(@RequestParam String code) {
         return userService.login(code);
     }
 
     @PostMapping("/logout")
     @ApiOperation("登出")
-    public Result logout() {
+    public Result<Object> logout() {
         // TODO 实现登出功能
         return Result.fail("功能未完成");
     }
 
     @GetMapping("/me")
     @ApiOperation("返回当前登录的用户")
-    public Result me(){
+    public Result<UserDTO> me(){
         // 获取当前登录的用户并返回
         UserDTO user = UserHolder.getUser();
-        return Result.ok(user);
+        return Result.success(user);
     }
 
     @PostMapping("/sign")
     @ApiOperation("签到")
-    public Result sign() {
+    public Result<Object> sign() {
         return userService.sign();
     }
 
     @GetMapping("/sign/count")
     @ApiOperation("当月签到次数")
-    public Result signCount() {
+    public Result<Integer> signCount() {
         return userService.signCount();
     }
 }

@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.volunteer.dto.Result;
 import com.volunteer.entity.Topic;
 
+import java.util.List;
+
 public interface ITopicService extends IService<Topic> {
-    Result likeTopic(Long id);
+    Result<Object> likeTopic(Long id);
 
-    Result queryHotTopic(Integer current);
+    Result<List<Topic>> queryHotTopic(Integer current);
 
-    Result queryTopicById(Long id);
+    Result<Topic> queryTopicById(Long id);
 }

@@ -13,9 +13,9 @@ import java.util.List;
 public class TopicCommentsServiceImpl extends ServiceImpl<TopicCommentsMapper, TopicComments> implements ITopicCommentsService {
 
     @Override
-    public Result queryTopicCommentsByTopicId(Long id) {
+    public Result<List<TopicComments>> queryTopicCommentsByTopicId(Long id) {
         List<TopicComments> topicComments = query().eq("topicId", id).list();
-        return Result.ok(topicComments);
+        return Result.success(topicComments);
     }
 
 

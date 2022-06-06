@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  *
@@ -25,16 +26,16 @@ public class TopicCommentsController {
 
     @PostMapping("/save")
     @ApiOperation("保存评论")
-    public Result saveTopicComments(@RequestBody TopicComments topicComments) {
+    public Result<Long> saveTopicComments(@RequestBody TopicComments topicComments) {
         String openid = UserHolder.getUser().getOpenid();
         topicComments.setUserId(openid);
         topicCommentsService.save(topicComments);
-        return Result.ok(topicComments.getId());
+        return Result.success(topicComments.getId());
     }
 
     @GetMapping("/{id}")
     @ApiOperation("根据id查询评论")
-    public Result queryTopicCommentsById(@PathVariable Long id) {
+    public Result<List<TopicComments>> queryTopicCommentsById(@PathVariable Long id) {
         return topicCommentsService.queryTopicCommentsByTopicId(id);
     }
 

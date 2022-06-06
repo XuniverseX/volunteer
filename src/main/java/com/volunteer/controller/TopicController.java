@@ -31,22 +31,22 @@ public class TopicController {
 
     @PostMapping
     @ApiOperation("保存话题")
-    public Result saveTopic(@RequestBody Topic topic) {
+    public Result<Long> saveTopic(@RequestBody Topic topic) {
         UserDTO user = UserHolder.getUser();
         topic.setUserId(user.getOpenid());
         topicService.save(topic);
-        return Result.ok(topic.getId());
+        return Result.success(topic.getId());
     }
 
     @GetMapping("like/{id}")
     @ApiOperation("根据用户open_id点赞话题")
-    public Result likeTopic(@PathVariable("id") Long id) {
+    public Result<Object> likeTopic(@PathVariable("id") Long id) {
         return topicService.likeTopic(id);
     }
 
     @GetMapping("/of/me")
     @ApiOperation("查询我的话题")
-    public Result queryMyTopic(@RequestParam(name = "current", defaultValue = "1") Integer current) {
+    public Result<List<Topic>> queryMyTopic(@RequestParam(name = "current", defaultValue = "1") Integer current) {
         // 获取登录用户
         UserDTO user = UserHolder.getUser();
         // 根据用户查询
@@ -54,18 +54,18 @@ public class TopicController {
                 .eq("user_id", user.getOpenid()).page(new Page<>(current, SystemConstants.MAX_PAGE_SIZE));
         // 获取当前页数据
         List<Topic> records = page.getRecords();
-        return Result.ok(records);
+        return Result.success(records);
     }
 
     @GetMapping("/hot")
     @ApiOperation("查询首页热门话题")
-    public Result queryHotTopic(@RequestParam(value = "current", defaultValue = "1") Integer current) {
+    public Result<List<Topic>> queryHotTopic(@RequestParam(value = "current", defaultValue = "1") Integer current) {
         return topicService.queryHotTopic(current);
     }
 
     @GetMapping("/{id}")
     @ApiOperation("通过话题Id查询话题")
-    public Result queryTopicById(@PathVariable("id") Long id) {
+    public Result<Topic> queryTopicById(@PathVariable("id") Long id) {
         return topicService.queryTopicById(id);
     }
 }
