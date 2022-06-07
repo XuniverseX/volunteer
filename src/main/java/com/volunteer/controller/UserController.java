@@ -27,9 +27,9 @@ public class UserController {
     @Resource
     private IUserService userService;
 
-    @GetMapping("/login")
+    @GetMapping("/login/{code}")
     @ApiOperation("登录")
-    public Result<TokenUserDTO> login(@RequestParam String code) {
+    public Result<TokenUserDTO> login(@PathVariable String code) {
         return userService.login(code);
     }
 

@@ -39,7 +39,7 @@ public class TopicController {
     }
 
     @GetMapping("like/{id}")
-    @ApiOperation("根据用户open_id点赞话题")
+    @ApiOperation("根据话题id点赞话题")
     public Result<Object> likeTopic(@PathVariable("id") Long id) {
         return topicService.likeTopic(id);
     }
