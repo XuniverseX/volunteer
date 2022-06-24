@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ *
+ * @author Xuni
+ * @since 2022-6-24
+ */
 @Slf4j
 @RestController
 @RequestMapping("/recruit")
