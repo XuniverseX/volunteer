@@ -30,7 +30,7 @@ public class TopicComments implements Serializable {
     private String userId;
 
     /**
-     * 探店id
+     * 话题id
      */
     private Long topicId;
 

@@ -8,5 +8,5 @@ public class UserDTO {
     private String sessionKey;
     private String icon;
     private String nickname;
-    private boolean isAuth;
+//    private boolean isAuth;
 }

@@ -43,4 +43,8 @@ public class Recruit implements Serializable {
 
     @ApiModelProperty("更新时间")
     private LocalDateTime updateTime;
+
+    private Integer ambition;
+
+    private String serviceTime;
 }

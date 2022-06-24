@@ -15,12 +15,16 @@ public class MvcConfig implements WebMvcConfigurer {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
-    // TODO
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate))
-//                .addPathPatterns("/**");
-        registry.addInterceptor(new LoginInterceptor())
-                .excludePathPatterns("/**");
+        registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate)).addPathPatterns(
+                "/**"
+        );
+        registry.addInterceptor(new LoginInterceptor()).excludePathPatterns(
+                "/user/login",
+                "/topic/hot"
+//                "/swagger-ui/**",
+//                "/swagger-ui.html"
+        );
     }
 }

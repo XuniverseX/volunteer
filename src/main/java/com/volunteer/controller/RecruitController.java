@@ -29,9 +29,9 @@ public class RecruitController {
     @PostMapping
     @ApiOperation("发布招募")
     public Result<Long> saveRecruit(@RequestBody Recruit recruit) {
-        if (!UserHolder.getUser().isAuth()) {
-            return Result.fail("您不是管理员");
-        }
+//        if (!UserHolder.getUser().isAuth()) {
+//            return Result.fail("您不是管理员");
+//        }
         String openid = UserHolder.getUser().getOpenid();
         recruit.setUserId(openid);
         recruitService.save(recruit);
