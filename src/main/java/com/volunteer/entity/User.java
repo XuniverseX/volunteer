@@ -33,6 +33,10 @@ public class User implements Serializable{
     @ApiModelProperty("用户头像")
     private String icon;
 
+    @TableField("is_auth")
+    @ApiModelProperty("是否是管理员")
+    private boolean isAuth;
+
 //    @TableField(value = "gender")
 //    @ApiModelProperty("用户性别")
 //    private Boolean gender;
