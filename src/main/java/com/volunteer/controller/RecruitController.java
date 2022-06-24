@@ -5,6 +5,7 @@ import com.volunteer.entity.Recruit;
 import com.volunteer.service.IRecruitService;
 import com.volunteer.utils.UserHolder;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class RecruitController {
     private IRecruitService recruitService;
 
     @PostMapping
+    @ApiOperation("发布招募")
     public Result<Long> saveRecruit(@RequestBody Recruit recruit) {
         if (!UserHolder.getUser().isAuth()) {
             return Result.fail("您不是管理员");
@@ -32,11 +34,13 @@ public class RecruitController {
     }
 
     @GetMapping("/list")
+    @ApiOperation("分页查询招募信息")
     public Result<List<Recruit>> queryRecruitList(@RequestParam(value = "current", defaultValue = "1") Integer current) {
         return recruitService.queryRecruitList(current);
     }
 
     @GetMapping("/{id}")
+    @ApiOperation("通过id查询招募信息")
     public Result<Recruit> queryRecruitById(@PathVariable Long id) {
         Recruit recruit = recruitService.getById(id);
         return Result.success(recruit);
