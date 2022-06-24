@@ -50,4 +50,10 @@ public class RecruitController {
         Recruit recruit = recruitService.getById(id);
         return Result.success(recruit);
     }
+
+    @PutMapping("/{id}/{userId}")
+    @ApiOperation("报名")
+    public Result<Object> apply(@PathVariable Long id, @PathVariable String userId) {
+        return recruitService.apply(id, userId);
+    }
 }
